@@ -1,26 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
+import TicTacToe from './components/TicTacToe';
 
-function App() {
-  return (
-    <div className="App">
+
+export default class App extends React.Component {
+  state = {
+    playerOne: 'X',
+    playerTwo: 'O',
+    cells: ['','','','','','','','',''],
+    currentPlayer: 'X'
+
+  }
+  
+  handleOnClick = (e) => {
+    if( this.state.cells[e.target.id] ==='') { 
+    //for dev
+    console.log(e.target.id)
+    this.setState({
+      currentPlayer: this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne,
+      cells: this.state.cells.map((cell, currentIndex) => {
+        if (`${currentIndex}` === e.target.id) {
+          return this.state.currentPlayer
+        } else {
+          return cell
+        }
+      }
+      )
+      
+    });
+  }
+  }
+
+
+  render() {
+    return (
+      <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+       Крестики-нолики
       </header>
+      <TicTacToe cells={this.state.cells} onClick={this.handleOnClick}/>
     </div>
-  );
+    )
+  }
 }
-
-export default App;
