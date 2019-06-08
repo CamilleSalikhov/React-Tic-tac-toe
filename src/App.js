@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Redirect } from 'react-router-dom'
 import './App.css';
 import TicTacToe from './components/TicTacToe';
 import YouWon from './components/YouWon';
+import Draw from './components/Draw'
 
 
 export default class App extends React.Component {
@@ -11,13 +12,13 @@ export default class App extends React.Component {
     playerTwo: 'O',
     cells: ['','','','','','','','',''],
     currentPlayer: 'X',
-    winningCombinations:[[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]],
-    winner : ''
+    winningCombinations:[[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
+
 
   }
   
   handleOnClick = (e) => {
-    if( this.state.cells[e.target.id] ==='' && !this.state.winner) { 
+    if( this.state.cells[e.target.id] ==='') { 
     //for dev
     console.log(e.target.id)
     this.setState({
@@ -32,10 +33,7 @@ export default class App extends React.Component {
       )
       
     });
-     
-    
   }
-  
   }
 
 
@@ -45,8 +43,7 @@ export default class App extends React.Component {
       playerTwo: 'O',
       cells: ['','','','','','','','',''],
       currentPlayer: 'X',
-      winningCombinations:[[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]],
-      winner : ''
+      winningCombinations:[[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
   
     });
   }
@@ -55,15 +52,18 @@ export default class App extends React.Component {
 
 
   render() {
+    
     console.log('we here ')
     let currCells = this.state.cells;
     
+    
 
     
-    return ( <BrowserRouter>
+    return (
+    <BrowserRouter>
       <div className="App">
       <header className="App-header">
-       Крестики-нолики
+      Крестики-нолики
       </header>
       <Route exact path='/' render = {props=>( (this.state.winningCombinations.find((elem) => {
       if(currCells[elem[0]] !== "" && currCells[elem[1]] !== ""  && currCells[elem[2]] !== ""  && currCells[elem[0]] === currCells[elem[1]] && currCells[elem[1]] === currCells[elem[2]]) {
@@ -73,11 +73,10 @@ export default class App extends React.Component {
       
        
       } else {return false} 
-    })) ?<Redirect to='/winner' /> : (<TicTacToe cells={this.state.cells} onClick={this.handleOnClick}/>))}></Route>
-      <Route path='/winner' render = {props=> (<YouWon resetState={this.resetState} currentPlayer={this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne} /> )}></Route>
-      
-      
-    </div>
+      })) ?<Redirect to='/winner' /> : ((currCells.find(elem => elem === '') === '') ? <TicTacToe cells={this.state.cells} onClick={this.handleOnClick}/> : <Redirect to='/draw' /> ))}></Route>
+      <Route path='/winner' render = {props=> (<YouWon resetState={this.resetState} winner={this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne} /> )} />
+      <Route path ='/draw' render = {props=> (<Draw resetState={this.resetState} />) } />
+      </div>
     </BrowserRouter>
     )
   }

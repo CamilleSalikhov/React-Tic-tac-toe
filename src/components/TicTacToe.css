@@ -3,6 +3,7 @@
     flex-direction: row;
     width: 400px;
     flex-wrap: wrap;
+    align-self: center;
     
 
 }
@@ -14,7 +15,7 @@
     height: 100px;
     border-style: solid;
     background-color: red;
-    font-size: 50px
+    font-size: 70px
     
 
 }
