@@ -55,6 +55,15 @@ export default class App extends React.Component {
     
     console.log('we here ')
     let currCells = this.state.cells;
+    let exactPath =  (this.state.winningCombinations.find((elem) => {
+      if(currCells[elem[0]] !== "" && currCells[elem[1]] !== ""  && currCells[elem[2]] !== ""  && currCells[elem[0]] === currCells[elem[1]] && currCells[elem[1]] === currCells[elem[2]]) {
+      console.log('we have a winner');
+     return true
+      
+      
+       
+      } else {return false} 
+      })) ?<Redirect to='/winner' /> : ((currCells.find(elem => elem === '') === '') ? <TicTacToe cells={this.state.cells} onClick={this.handleOnClick}/> : <Redirect to='/draw' /> )
     
     
 
@@ -65,17 +74,9 @@ export default class App extends React.Component {
       <header className="App-header">
       Крестики-нолики
       </header>
-      <Route exact path='/' render = {props=>( (this.state.winningCombinations.find((elem) => {
-      if(currCells[elem[0]] !== "" && currCells[elem[1]] !== ""  && currCells[elem[2]] !== ""  && currCells[elem[0]] === currCells[elem[1]] && currCells[elem[1]] === currCells[elem[2]]) {
-      console.log('we have a winner');
-     return true
-      
-      
-       
-      } else {return false} 
-      })) ?<Redirect to='/winner' /> : ((currCells.find(elem => elem === '') === '') ? <TicTacToe cells={this.state.cells} onClick={this.handleOnClick}/> : <Redirect to='/draw' /> ))}></Route>
-      <Route path='/winner' render = {props=> (<YouWon resetState={this.resetState} winner={this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne} /> )} />
-      <Route path ='/draw' render = {props=> (<Draw resetState={this.resetState} />) } />
+      <Route exact path='/' render = {props => exactPath} />
+      <Route path='/winner' render = {props => <YouWon resetState={this.resetState} winner={this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne} />} />
+      <Route path ='/draw' render = {props => <Draw resetState={this.resetState} />} />
       </div>
     </BrowserRouter>
     )
