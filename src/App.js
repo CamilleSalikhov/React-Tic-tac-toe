@@ -52,21 +52,17 @@ export default class App extends React.Component {
 
 
   render() {
-    
-    console.log('we here ')
+
     let currCells = this.state.cells;
     let exactPath =  (this.state.winningCombinations.find((elem) => {
       if(currCells[elem[0]] !== "" && currCells[elem[1]] !== ""  && currCells[elem[2]] !== ""  && currCells[elem[0]] === currCells[elem[1]] && currCells[elem[1]] === currCells[elem[2]]) {
-      console.log('we have a winner');
-     return true
-      
-      
-       
-      } else {return false} 
-      })) ?<Redirect to='/winner' /> : ((currCells.find(elem => elem === '') === '') ? <TicTacToe cells={this.state.cells} onClick={this.handleOnClick}/> : <Redirect to='/draw' /> )
-    
-    
-
+        console.log('we have a winner');
+        return true
+      } else {
+        return false
+      } 
+    })) ? <Redirect to='/winner' /> : ((currCells.find(elem => elem === '') === '') ? <TicTacToe cells={this.state.cells} onClick={this.handleOnClick} /> : <Redirect to='/draw' />);
+    let possibleWinner = this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne;
     
     return (
     <BrowserRouter>
@@ -75,10 +71,12 @@ export default class App extends React.Component {
       Крестики-нолики
       </header>
       <Route exact path='/' render = {props => exactPath} />
-      <Route path='/winner' render = {props => <YouWon resetState={this.resetState} winner={this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne} />} />
+      <Route path='/winner' render = {props => <YouWon resetState={this.resetState} winner={possibleWinner} />} />
       <Route path ='/draw' render = {props => <Draw resetState={this.resetState} />} />
       </div>
     </BrowserRouter>
     )
   }
 }
+
+
