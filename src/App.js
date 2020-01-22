@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter,Switch, Route, Redirect } from 'react-router-dom'
 import './App.css';
 import TicTacToe from './components/TicTacToe';
 import YouWon from './components/YouWon';
@@ -7,6 +7,9 @@ import Draw from './components/Draw'
 
 
 export default class App extends React.Component {
+
+
+
   state = {
     playerOne: 'X',
     playerTwo: 'O',
@@ -16,12 +19,12 @@ export default class App extends React.Component {
 
 
   }
+
   
   handleOnClick = (e) => {
+    e.persist();
     if( this.state.cells[e.target.id] ==='') { 
-    //for dev
-    console.log(e.target.id)
-    this.setState({
+    this.setState(() =>({
       currentPlayer: this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne,
       cells: this.state.cells.map((cell, currentIndex) => {
         if (`${currentIndex}` === e.target.id) {
@@ -32,7 +35,7 @@ export default class App extends React.Component {
       }
       )
       
-    });
+    }));
   }
   }
 
@@ -52,7 +55,6 @@ export default class App extends React.Component {
 
 
   render() {
-
     let currCells = this.state.cells;
     let exactPath =  (this.state.winningCombinations.find((elem) => {
       if(currCells[elem[0]] !== "" && currCells[elem[1]] !== ""  && currCells[elem[2]] !== ""  && currCells[elem[0]] === currCells[elem[1]] && currCells[elem[1]] === currCells[elem[2]]) {
@@ -62,19 +64,23 @@ export default class App extends React.Component {
         return false
       } 
     })) ? <Redirect to='/winner' /> : ((currCells.find(elem => elem === '') === '') ? <TicTacToe cells={this.state.cells} onClick={this.handleOnClick} /> : <Redirect to='/draw' />);
+    
     let possibleWinner = this.state.currentPlayer === this.state.playerOne ? this.state.playerTwo : this.state.playerOne;
     
     return (
-    <BrowserRouter>
       <div className="App">
-      <header className="App-header">
-      Крестики-нолики
-      </header>
+        <header className="App-header">
+          Крестики-нолики
+        </header>
+      <BrowserRouter>
+    <Switch>
       <Route exact path='/' render = {props => exactPath} />
       <Route path='/winner' render = {props => <YouWon resetState={this.resetState} winner={possibleWinner} />} />
       <Route path ='/draw' render = {props => <Draw resetState={this.resetState} />} />
-      </div>
+      <Route render={() =><div>Страница не найдена!</div>} />
+    </Switch>
     </BrowserRouter>
+    </div>
     )
   }
 }

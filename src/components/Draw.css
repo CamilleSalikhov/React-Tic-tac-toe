@@ -1,0 +1,10 @@
+.draw-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.link-home {
+    align-self: center;
+    text-decoration: none;
+    color: red;
+}
